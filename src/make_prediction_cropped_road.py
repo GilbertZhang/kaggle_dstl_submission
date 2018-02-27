@@ -23,7 +23,7 @@ model = read_model()
 sample = pd.read_csv('../data/sample_submission.csv')
 
 data_path = '../data'
-num_channels = 16
+num_channels = 3
 num_mask_channels = 1
 threashold = 0.9
 
@@ -54,7 +54,7 @@ def mask2poly(predicted_mask, threashold, x_scaler, y_scaler):
 
 
 for image_id in tqdm(test_ids):
-    image = extra_functions.read_image_16(image_id)
+    image = extra_functions.read_image_3(image_id)
 
     H = image.shape[1]
     W = image.shape[2]

@@ -30,7 +30,7 @@ img_cols = 112
 
 smooth = 1e-12
 
-num_channels = 16
+num_channels = 3
 num_mask_channels = 1
 
 
@@ -225,7 +225,7 @@ if __name__ == '__main__':
     model = get_unet0()
 
     print('[{}] Reading train...'.format(str(datetime.datetime.now())))
-    f = h5py.File(os.path.join(data_path, 'train_16.h5'), 'r')
+    f = h5py.File(os.path.join(data_path, 'train_3.h5'), 'r')
 
     X_train = np.array(f['train'])
 

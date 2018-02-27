@@ -240,7 +240,15 @@ def read_image_16(image_id):
     return result.astype(np.float16)
 
 
-def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=(388, 388), num_channels=19, num_masks=10):
+def read_image_3(image_id):
+
+    img_3 = np.transpose(tiff.imread("../data/three_band/{}.tif".format(image_id)), (1, 2, 0)) / 2047.0
+
+    result = np.transpose(img_3, (2, 0, 1))
+    return result.astype(np.float16)
+
+
+def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=(388, 388), num_channels=3, num_masks=10):
     shift = int((initial_size[0] - final_size[0]) / 2)
 
     height = X_train.shape[1]
