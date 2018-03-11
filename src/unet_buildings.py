@@ -148,10 +148,10 @@ def flip_axis(x, axis):
 
 
 def form_batch(X, y, batch_size):
-    X_batch = np.zeros((batch_size, num_channels, img_rows, img_cols))
-    y_batch = np.zeros((batch_size, num_mask_channels, img_rows, img_cols))
-    X_height = X.shape[2]
-    X_width = X.shape[3]
+    X_batch = np.zeros((batch_size, img_rows, img_cols, num_channels))
+    y_batch = np.zeros((batch_size, img_rows, img_cols, num_mask_channels))
+    X_height = X.shape[1]
+    X_width = X.shape[2]
 
     for i in range(batch_size):
         random_width = random.randint(0, X_width - img_cols - 1)
@@ -159,8 +159,8 @@ def form_batch(X, y, batch_size):
 
         random_image = random.randint(0, X.shape[0] - 1)
 
-        y_batch[i] = y[random_image, :, random_height: random_height + img_rows, random_width: random_width + img_cols]
-        X_batch[i] = np.array(X[random_image, :, random_height: random_height + img_rows, random_width: random_width + img_cols])
+        y_batch[i] = y[random_image, random_height: random_height + img_rows, random_width: random_width + img_cols, :]
+        X_batch[i] = np.array(X[random_image, random_height: random_height + img_rows, random_width: random_width + img_cols, :])
     return X_batch, y_batch
 
 
@@ -199,23 +199,23 @@ def batch_generator(X, y, batch_size, horizontal_flip=False, vertical_flip=False
 
             if horizontal_flip:
                 if np.random.random() < 0.5:
-                    xb = flip_axis(xb, 1)
-                    yb = flip_axis(yb, 1)
+                    xb = flip_axis(xb, 0)
+                    yb = flip_axis(yb, 0)
 
             if vertical_flip:
                 if np.random.random() < 0.5:
-                    xb = flip_axis(xb, 2)
-                    yb = flip_axis(yb, 2)
+                    xb = flip_axis(xb, 1)
+                    yb = flip_axis(yb, 1)
 
             if swap_axis:
                 if np.random.random() < 0.5:
-                    xb = xb.swapaxes(1, 2)
-                    yb = yb.swapaxes(1, 2)
+                    xb = xb.swapaxes(0, 1)
+                    yb = yb.swapaxes(0, 1)
 
             X_batch[i] = xb
             y_batch[i] = yb
 
-        yield X_batch, y_batch[:, :, 16:16 + img_rows - 32, 16:16 + img_cols - 32]
+        yield X_batch, y_batch[:, 16:16 + img_rows - 32, 16:16 + img_cols - 32, :]
 
 
 def save_model(model, cross):
