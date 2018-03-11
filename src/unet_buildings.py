@@ -61,7 +61,7 @@ def jaccard_coef_loss(y_true, y_pred):
 
 
 def get_unet0():
-    inputs = Input((num_channels, img_rows, img_cols))
+    inputs = Input((img_rows, img_cols, num_channels))
     conv1 = Convolution2D(32, 3, 3, border_mode='same', init='he_uniform')(inputs)
     conv1 = BatchNormalization(mode=0, axis=1)(conv1)
     conv1 = keras.layers.advanced_activations.ELU()(conv1)
