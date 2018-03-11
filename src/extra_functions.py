@@ -110,13 +110,13 @@ def generate_mask(image_id, height, width, num_mask_channels=10, train=train_wkt
     :return: mask corresponding to an image_id of the desired height and width with desired number of channels
     """
 
-    mask = np.zeros((num_mask_channels, height, width))
+    mask = np.zeros((height, width, num_mask_channels))
 
     for mask_channel in range(num_mask_channels):
         poly = train.loc[(train['ImageId'] == image_id)
                          & (train['ClassType'] == mask_channel + 1), 'MultipolygonWKT'].values[0]
         polygons = shapely.wkt.loads(poly)
-        mask[mask_channel, :, :] = polygons2mask_layer(height, width, polygons, image_id)
+        mask[:, :, mask_channel] = polygons2mask_layer(height, width, polygons, image_id)
     return mask
 
 
@@ -244,8 +244,8 @@ def read_image_3(image_id):
 
     img_3 = np.transpose(tiff.imread("../data/three_band/{}.tif".format(image_id)), (1, 2, 0)) / 2047.0
 
-    result = np.transpose(img_3, (2, 0, 1))
-    return result.astype(np.float16)
+    #result = np.transpose(img_3, (2, 0, 1))
+    return img_3.astype(np.float16)
 
 
 def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=(388, 388), num_channels=3, num_masks=10):

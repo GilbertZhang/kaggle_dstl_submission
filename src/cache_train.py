@@ -83,22 +83,22 @@ def cache_train_3():
 
     f = h5py.File(os.path.join(data_path, 'train_3.h5'), 'w', compression='blosc:lz4', compression_opts=9)
 
-    imgs = f.create_dataset('train', (num_train, num_channels, image_rows, image_cols), dtype=np.float16)
-    imgs_mask = f.create_dataset('train_mask', (num_train, num_mask_channels, image_rows, image_cols), dtype=np.uint8)
+    imgs = f.create_dataset('train', (num_train, image_rows, image_cols, num_channels), dtype=np.float16)
+    imgs_mask = f.create_dataset('train_mask', (num_train, image_rows, image_cols, num_mask_channels), dtype=np.uint8)
 
     ids = []
 
     i = 0
     for image_id in tqdm(sorted(train_wkt['ImageId'].unique())):
         image = extra_functions.read_image_3(image_id)
-        _, height, width = image.shape
+        height, width, _ = image.shape
 
-        imgs[i] = image[:, :min_train_height, :min_train_width]
+        imgs[i] = image[:min_train_height, :min_train_width, :]
         imgs_mask[i] = extra_functions.generate_mask(image_id,
                                                      height,
                                                      width,
                                                      num_mask_channels=num_mask_channels,
-                                                     train=train_wkt)[:, :min_train_height, :min_train_width]
+                                                     train=train_wkt)[:min_train_height, :min_train_width, :]
 
         ids += [image_id]
         i += 1
