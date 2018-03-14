@@ -254,7 +254,7 @@ if __name__ == '__main__':
 
     X_train = f['train']
 
-    y_train = np.array(f['train_mask'])[:, 0]
+    y_train = np.array(f['train_mask'])[:,:,:, 0]
     y_train = np.expand_dims(y_train, 3)
     print(y_train.shape)
 

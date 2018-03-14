@@ -1,1 +1,8 @@
 *.json
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.h5
+src/history
+data
