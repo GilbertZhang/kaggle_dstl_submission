@@ -14,8 +14,8 @@ import numpy as np
 def read_model(cross=''):
     json_name = 'architecture_128_50_buildings_3_' + cross + '.json'
     weight_name = 'model_weights_128_50_buildings_3_' + cross + '.h5'
-    model = model_from_json(open(os.path.join('../src/cache', json_name)).read())
-    model.load_weights(os.path.join('../src/cache', weight_name))
+    model = model_from_json(open(os.path.join('./src/cache', json_name)).read())
+    model.load_weights(os.path.join('./src/cache', weight_name))
     return model
 
 model = read_model()
@@ -55,8 +55,8 @@ def mask2poly(predicted_mask, threashold, x_scaler, y_scaler):
 for image_id in tqdm(test_ids):
     image = extra_functions.read_image_3(image_id)
 
-    H = image.shape[1]
-    W = image.shape[2]
+    H = image.shape[0]
+    W = image.shape[1]
 
     x_max, y_min = extra_functions._get_xmax_ymin(image_id)
 
@@ -64,28 +64,28 @@ for image_id in tqdm(test_ids):
                                                              final_size=(112-32, 112-32),
                                                              num_masks=num_mask_channels, num_channels=num_channels)
 
-    image_v = flip_axis(image, 1)
+    image_v = flip_axis(image, 0)
     predicted_mask_v = extra_functions.make_prediction_cropped(model, image_v, initial_size=(112, 112),
                                                                final_size=(112 - 32, 112 - 32),
                                                                num_masks=1,
                                                                num_channels=num_channels)
 
-    image_h = flip_axis(image, 2)
+    image_h = flip_axis(image, 1)
     predicted_mask_h = extra_functions.make_prediction_cropped(model, image_h, initial_size=(112, 112),
                                                                final_size=(112 - 32, 112 - 32),
                                                                num_masks=1,
                                                                num_channels=num_channels)
 
-    image_s = image.swapaxes(1, 2)
+    image_s = image.swapaxes(0, 1)
     predicted_mask_s = extra_functions.make_prediction_cropped(model, image_s, initial_size=(112, 112),
                                                                final_size=(112 - 32, 112 - 32),
                                                                num_masks=1,
                                                                num_channels=num_channels)
 
     new_mask = np.power(predicted_mask *
-                        flip_axis(predicted_mask_v, 1) *
-                        flip_axis(predicted_mask_h, 2) *
-                        predicted_mask_s.swapaxes(1, 2), 0.25)
+                        flip_axis(predicted_mask_v, 0) *
+                        flip_axis(predicted_mask_h, 1) *
+                        predicted_mask_s.swapaxes(0, 1), 0.25)
 
     x_scaler, y_scaler = extra_functions.get_scalers(H, W, x_max, y_min)
 

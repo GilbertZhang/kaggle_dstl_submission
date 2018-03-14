@@ -251,8 +251,8 @@ def read_image_3(image_id):
 def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=(388, 388), num_channels=3, num_masks=10):
     shift = int((initial_size[0] - final_size[0]) / 2)
 
-    height = X_train.shape[1]
-    width = X_train.shape[2]
+    height = X_train.shape[0]
+    width = X_train.shape[1]
 
     if height % final_size[1] == 0:
         num_h_tiles = int(height / final_size[1])
@@ -272,7 +272,7 @@ def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=
 
     padded = np.zeros((num_channels, padded_height, padded_width))
 
-    padded[:, shift:shift + height, shift: shift + width] = X_train
+    padded[shift:shift + height, shift: shift + width, :] = X_train
 
     # add mirror reflections to the padded areas
     up = padded[:, shift:2 * shift, shift:-shift][:, ::-1]
@@ -303,11 +303,11 @@ def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=
 
     prediction = model.predict(np.array(temp))
 
-    predicted_mask = np.zeros((num_masks, rounded_height, rounded_width))
+    predicted_mask = np.zeros((rounded_height, rounded_width, num_masks))
 
     for j_h, h in enumerate(h_start):
          for j_w, w in enumerate(w_start):
              i = len(w_start) * j_h + j_w
-             predicted_mask[:, h: h + final_size[0], w: w + final_size[0]] = prediction[i]
+             predicted_mask[h: h + final_size[0], w: w + final_size[0], :] = prediction[i]
 
-    return predicted_mask[:, :height, :width]
+    return predicted_mask[:height, :width, :]
