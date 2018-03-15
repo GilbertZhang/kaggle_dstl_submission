@@ -270,7 +270,7 @@ def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=
     padded_height = rounded_height + 2 * shift
     padded_width = rounded_width + 2 * shift
 
-    padded = np.zeros((num_channels, padded_height, padded_width))
+    padded = np.zeros((padded_height, padded_width, num_channels))
 
     padded[shift:shift + height, shift: shift + width, :] = X_train
 

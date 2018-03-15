@@ -62,9 +62,9 @@ for image_id in tqdm(test_ids):
     rgb = tiff.imread('../data/three_band/{}.tif'.format(image_id))
     _, height, width = rgb.shape
     rgb = np.rollaxis(rgb, 0, 3)
-    m = tiff.imread('../data/sixteen_band/{}_M.tif'.format(image_id))
+    # m = tiff.imread('../data/sixteen_band/{}_M.tif'.format(image_id))
     # get our index
-    CCCI = CCCI_index(m, rgb)
+    # CCCI = CCCI_index(m, rgb)
 
     x_max, y_min = extra_functions._get_xmax_ymin(image_id)
     x_scaler, y_scaler = extra_functions.get_scalers(height, width, x_max, y_min)
