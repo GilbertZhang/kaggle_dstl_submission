@@ -14,8 +14,8 @@ import numpy as np
 def read_model(cross=''):
     json_name = 'architecture_128_50_buildings_3_' + cross + '.json'
     weight_name = 'model_weights_128_50_buildings_3_' + cross + '.h5'
-    model = model_from_json(open(os.path.join('./src/cache', json_name)).read())
-    model.load_weights(os.path.join('./src/cache', weight_name))
+    model = model_from_json(open(os.path.join('./cache', json_name)).read())
+    model.load_weights(os.path.join('./cache', weight_name))
     return model
 
 model = read_model()
