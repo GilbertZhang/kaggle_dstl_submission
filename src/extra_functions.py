@@ -275,20 +275,20 @@ def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=
     padded[shift:shift + height, shift: shift + width, :] = X_train
 
     # add mirror reflections to the padded areas
-    up = padded[:, shift:2 * shift, shift:-shift][:, ::-1]
-    padded[:, :shift, shift:-shift] = up
+    up = padded[shift:2 * shift, shift:-shift, :][::-1]
+    padded[:shift, shift:-shift, :] = up
 
     lag = padded.shape[1] - height - shift
-    bottom = padded[:, height + shift - lag:shift + height, shift:-shift][:, ::-1]
-    padded[:, height + shift:, shift:-shift] = bottom
+    bottom = padded[height + shift - lag:shift + height, shift:-shift, :][::-1]
+    padded[height + shift:, shift:-shift, :] = bottom
 
-    left = padded[:, :, shift:2 * shift][:, :, ::-1]
-    padded[:, :, :shift] = left
+    left = padded[:, shift:2 * shift, :][:, ::-1]
+    padded[:, :shift, :] = left
 
     lag = padded.shape[2] - width - shift
-    right = padded[:, :, width + shift - lag:shift + width][:, :, ::-1]
+    right = padded[:, width + shift - lag:shift + width, :][:, ::-1]
 
-    padded[:, :, width + shift:] = right
+    padded[:, width + shift:, :] = right
 
     h_start = range(0, padded_height, final_size[0])[:-1]
     assert len(h_start) == num_h_tiles
@@ -299,7 +299,7 @@ def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=
     temp = []
     for h in h_start:
         for w in w_start:
-            temp += [padded[:, h:h + initial_size[0], w:w + initial_size[0]]]
+            temp += [padded[h:h + initial_size[0], w:w + initial_size[0], :]]
 
     prediction = model.predict(np.array(temp))
 
