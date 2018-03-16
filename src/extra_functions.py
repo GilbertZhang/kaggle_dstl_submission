@@ -278,14 +278,14 @@ def make_prediction_cropped(model, X_train, initial_size=(572, 572), final_size=
     up = padded[shift:2 * shift, shift:-shift, :][::-1]
     padded[:shift, shift:-shift, :] = up
 
-    lag = padded.shape[1] - height - shift
+    lag = padded.shape[0] - height - shift
     bottom = padded[height + shift - lag:shift + height, shift:-shift, :][::-1]
     padded[height + shift:, shift:-shift, :] = bottom
 
     left = padded[:, shift:2 * shift, :][:, ::-1]
     padded[:, :shift, :] = left
 
-    lag = padded.shape[2] - width - shift
+    lag = padded.shape[1] - width - shift
     right = padded[:, width + shift - lag:shift + width, :][:, ::-1]
 
     padded[:, width + shift:, :] = right
