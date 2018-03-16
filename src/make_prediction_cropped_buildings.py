@@ -46,7 +46,7 @@ def flip_axis(x, axis):
 
 @jit
 def mask2poly(predicted_mask, threashold, x_scaler, y_scaler):
-    polygons = extra_functions.mask2polygons_layer(predicted_mask[0] > threashold, epsilon=0, min_area=5)
+    polygons = extra_functions.mask2polygons_layer(predicted_mask[:,:, 0] > threashold, epsilon=0, min_area=5)
 
     polygons = shapely.affinity.scale(polygons, xfact=1.0 / x_scaler, yfact=1.0 / y_scaler, origin=(0, 0, 0))
     return shapely.wkt.dumps(polygons.buffer(2.6e-5))
