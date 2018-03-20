@@ -147,8 +147,8 @@ def flip_axis(x, axis):
 
 
 def form_batch(X, y, batch_size):
-    X_batch = np.zeros((batch_size, num_channels, img_rows, img_cols))
-    y_batch = np.zeros((batch_size, num_mask_channels, img_rows, img_cols))
+    X_batch = np.zeros((batch_size, img_rows, img_cols, num_channels))
+    y_batch = np.zeros((batch_size, img_rows, img_cols, num_mask_channels))
     X_height = X.shape[1]
     X_width = X.shape[2]
 
