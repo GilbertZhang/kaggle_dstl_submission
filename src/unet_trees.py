@@ -62,26 +62,26 @@ def jaccard_coef_loss(y_true, y_pred):
 def get_unet0():
     inputs = Input((num_channels, img_rows, img_cols))
     conv1 = Convolution2D(32, 3, 3, border_mode='same', init='he_uniform')(inputs)
-    conv1 = BatchNormalization(mode=0, axis=1)(conv1)
+    conv1 = BatchNormalization(mode=0, axis=3)(conv1)
     conv1 = keras.layers.advanced_activations.ELU()(conv1)
     conv1 = Convolution2D(32, 3, 3, border_mode='same', init='he_uniform')(conv1)
-    conv1 = BatchNormalization(mode=0, axis=1)(conv1)
+    conv1 = BatchNormalization(mode=0, axis=3)(conv1)
     conv1 = keras.layers.advanced_activations.ELU()(conv1)
     pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
 
     conv2 = Convolution2D(64, 3, 3, border_mode='same', init='he_uniform')(pool1)
-    conv2 = BatchNormalization(mode=0, axis=1)(conv2)
+    conv2 = BatchNormalization(mode=0, axis=3)(conv2)
     conv2 = keras.layers.advanced_activations.ELU()(conv2)
     conv2 = Convolution2D(64, 3, 3, border_mode='same', init='he_uniform')(conv2)
-    conv2 = BatchNormalization(mode=0, axis=1)(conv2)
+    conv2 = BatchNormalization(mode=0, axis=3)(conv2)
     conv2 = keras.layers.advanced_activations.ELU()(conv2)
     pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
 
     conv3 = Convolution2D(128, 3, 3, border_mode='same', init='he_uniform')(pool2)
-    conv3 = BatchNormalization(mode=0, axis=1)(conv3)
+    conv3 = BatchNormalization(mode=0, axis=3)(conv3)
     conv3 = keras.layers.advanced_activations.ELU()(conv3)
     conv3 = Convolution2D(128, 3, 3, border_mode='same', init='he_uniform')(conv3)
-    conv3 = BatchNormalization(mode=0, axis=1)(conv3)
+    conv3 = BatchNormalization(mode=0, axis=3)(conv3)
     conv3 = keras.layers.advanced_activations.ELU()(conv3)
     pool3 = MaxPooling2D(pool_size=(2, 2))(conv3)
 
@@ -94,43 +94,43 @@ def get_unet0():
     pool4 = MaxPooling2D(pool_size=(2, 2))(conv4)
 
     conv5 = Convolution2D(512, 3, 3, border_mode='same', init='he_uniform')(pool4)
-    conv5 = BatchNormalization(mode=0, axis=1)(conv5)
+    conv5 = BatchNormalization(mode=0, axis=3)(conv5)
     conv5 = keras.layers.advanced_activations.ELU()(conv5)
     conv5 = Convolution2D(512, 3, 3, border_mode='same', init='he_uniform')(conv5)
-    conv5 = BatchNormalization(mode=0, axis=1)(conv5)
+    conv5 = BatchNormalization(mode=0, axis=3)(conv5)
     conv5 = keras.layers.advanced_activations.ELU()(conv5)
 
-    up6 = merge([UpSampling2D(size=(2, 2))(conv5), conv4], mode='concat', concat_axis=1)
+    up6 = merge([UpSampling2D(size=(2, 2))(conv5), conv4], mode='concat', concat_axis=3)
     conv6 = Convolution2D(256, 3, 3, border_mode='same', init='he_uniform')(up6)
-    conv6 = BatchNormalization(mode=0, axis=1)(conv6)
+    conv6 = BatchNormalization(mode=0, axis=3)(conv6)
     conv6 = keras.layers.advanced_activations.ELU()(conv6)
     conv6 = Convolution2D(256, 3, 3, border_mode='same', init='he_uniform')(conv6)
-    conv6 = BatchNormalization(mode=0, axis=1)(conv6)
+    conv6 = BatchNormalization(mode=0, axis=3)(conv6)
     conv6 = keras.layers.advanced_activations.ELU()(conv6)
 
-    up7 = merge([UpSampling2D(size=(2, 2))(conv6), conv3], mode='concat', concat_axis=1)
+    up7 = merge([UpSampling2D(size=(2, 2))(conv6), conv3], mode='concat', concat_axis=3)
     conv7 = Convolution2D(128, 3, 3, border_mode='same', init='he_uniform')(up7)
-    conv7 = BatchNormalization(mode=0, axis=1)(conv7)
+    conv7 = BatchNormalization(mode=0, axis=3)(conv7)
     conv7 = keras.layers.advanced_activations.ELU()(conv7)
     conv7 = Convolution2D(128, 3, 3, border_mode='same', init='he_uniform')(conv7)
-    conv7 = BatchNormalization(mode=0, axis=1)(conv7)
+    conv7 = BatchNormalization(mode=0, axis=3)(conv7)
     conv7 = keras.layers.advanced_activations.ELU()(conv7)
 
-    up8 = merge([UpSampling2D(size=(2, 2))(conv7), conv2], mode='concat', concat_axis=1)
+    up8 = merge([UpSampling2D(size=(2, 2))(conv7), conv2], mode='concat', concat_axis=3)
     conv8 = Convolution2D(64, 3, 3, border_mode='same', init='he_uniform')(up8)
     conv8 = BatchNormalization(mode=0, axis=1)(conv8)
     conv8 = keras.layers.advanced_activations.ELU()(conv8)
     conv8 = Convolution2D(64, 3, 3, border_mode='same', init='he_uniform')(conv8)
-    conv8 = BatchNormalization(mode=0, axis=1)(conv8)
+    conv8 = BatchNormalization(mode=0, axis=3)(conv8)
     conv8 = keras.layers.advanced_activations.ELU()(conv8)
 
-    up9 = merge([UpSampling2D(size=(2, 2))(conv8), conv1], mode='concat', concat_axis=1)
+    up9 = merge([UpSampling2D(size=(2, 2))(conv8), conv1], mode='concat', concat_axis=3)
     conv9 = Convolution2D(32, 3, 3, border_mode='same', init='he_uniform')(up9)
-    conv9 = BatchNormalization(mode=0, axis=1)(conv9)
+    conv9 = BatchNormalization(mode=0, axis=3)(conv9)
     conv9 = keras.layers.advanced_activations.ELU()(conv9)
     conv9 = Convolution2D(32, 3, 3, border_mode='same', init='he_uniform')(conv9)
     crop9 = Cropping2D(cropping=((16, 16), (16, 16)))(conv9)
-    conv9 = BatchNormalization(mode=0, axis=1)(crop9)
+    conv9 = BatchNormalization(mode=0, axis=3)(crop9)
     conv9 = keras.layers.advanced_activations.ELU()(conv9)
     conv10 = Convolution2D(num_mask_channels, 1, 1, activation='sigmoid')(conv9)
 
@@ -149,8 +149,8 @@ def flip_axis(x, axis):
 def form_batch(X, y, batch_size):
     X_batch = np.zeros((batch_size, num_channels, img_rows, img_cols))
     y_batch = np.zeros((batch_size, num_mask_channels, img_rows, img_cols))
-    X_height = X.shape[2]
-    X_width = X.shape[3]
+    X_height = X.shape[1]
+    X_width = X.shape[2]
 
     for i in range(batch_size):
         random_width = random.randint(0, X_width - img_cols - 1)
@@ -158,8 +158,8 @@ def form_batch(X, y, batch_size):
 
         random_image = random.randint(0, X.shape[0] - 1)
 
-        y_batch[i] = y[random_image, :, random_height: random_height + img_rows, random_width: random_width + img_cols]
-        X_batch[i] = np.array(X[random_image, :, random_height: random_height + img_rows, random_width: random_width + img_cols])
+        y_batch[i] = y[random_image, random_height: random_height + img_rows, random_width: random_width + img_cols, :]
+        X_batch[i] = np.array(X[random_image, random_height: random_height + img_rows, random_width: random_width + img_cols, :])
     return X_batch, y_batch
 
 
@@ -198,23 +198,23 @@ def batch_generator(X, y, batch_size, horizontal_flip=False, vertical_flip=False
 
             if horizontal_flip:
                 if np.random.random() < 0.5:
-                    xb = flip_axis(xb, 1)
-                    yb = flip_axis(yb, 1)
+                    xb = flip_axis(xb, 0)
+                    yb = flip_axis(yb, 0)
 
             if vertical_flip:
                 if np.random.random() < 0.5:
-                    xb = flip_axis(xb, 2)
-                    yb = flip_axis(yb, 2)
+                    xb = flip_axis(xb, 1)
+                    yb = flip_axis(yb, 1)
 
             if swap_axis:
                 if np.random.random() < 0.5:
-                    xb = xb.swapaxes(1, 2)
-                    yb = yb.swapaxes(1, 2)
+                    xb = xb.swapaxes(0, 1)
+                    yb = yb.swapaxes(0, 1)
 
             X_batch[i] = xb
             y_batch[i] = yb
 
-        yield X_batch, y_batch[:, :, 16:16 + img_rows - 32, 16:16 + img_cols - 32]
+        yield X_batch, y_batch[:, 16:16 + img_rows - 32, 16:16 + img_cols - 32, :]
 
 
 def save_model(model, cross):
@@ -253,8 +253,8 @@ if __name__ == '__main__':
 
     X_train = f['train']
 
-    y_train = np.array(f['train_mask'])[:, 4]
-    y_train = np.expand_dims(y_train, 1)
+    y_train = np.array(f['train_mask'])[:, :, :, 4]
+    y_train = np.expand_dims(y_train, 3)
     print(y_train.shape)
 
     train_ids = np.array(f['train_ids'])
